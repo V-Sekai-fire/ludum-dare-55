@@ -381,6 +381,12 @@ func _eval_tree() -> void:
 			xr_origin_reparented = true
 			target_xr_viewport.use_xr = false
 			target_xr_viewport = xr_origin_3d.get_viewport()
+			# Reload action map for VR (same code usually used for button press)
+			xr_config_handler.load_action_map_file(xr_config_handler.game_action_map_cfg_path)
+			if use_arm_swing_jump:
+				xr_physical_movement_controller.detect_game_jump_action_events()
+			if use_jog_movement:
+				xr_physical_movement_controller.detect_game_sprint_events()
 			
 # Function to set up VR Controllers to emulate gamepad
 func map_xr_controllers_to_action_map() -> bool:
