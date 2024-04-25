@@ -32,8 +32,12 @@ func _ready():
 	%qtd.pressed.connect(_on_quit)
 	%version.text = "v" + ProjectSettings.get_setting("application/config/version", "DEV")
 
-	if not OS.has_feature("editor"):
-		%dev.hide()
+	# For VR Always enable sandbox mode, this was originally triggered only with F1 buton press
+	#if not OS.has_feature("editor"):
+		#%dev.hide()
+	%dev.show()
+	Globals.set_flag("level_1")
+	Globals.set_flag("sandbox")
 
 const ALL_MAPS := {
 	"level_1": "res://game/level_1.tscn",

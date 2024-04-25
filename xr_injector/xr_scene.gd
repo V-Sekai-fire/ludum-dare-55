@@ -362,6 +362,9 @@ func _eval_tree() -> void:
 		
 		# If we now found a roomscale body, reparent xr origin 3D to character body
 		if is_instance_valid(current_roomscale_character_body) and xr_origin_reparented == false:
+			# Turn off pointer (usually used for gesture, to avoid needing to do gesture here to turn off pointer once body found)
+			xr_pointer.set_enabled(false)
+			
 			if is_instance_valid(current_camera_remote_transform):
 				current_camera_remote_transform.remote_path = ""
 			remove_child(xr_origin_3d)
@@ -381,12 +384,15 @@ func _eval_tree() -> void:
 			xr_origin_reparented = true
 			target_xr_viewport.use_xr = false
 			target_xr_viewport = xr_origin_3d.get_viewport()
-			# Reload action map for VR (same code usually used for button press)
+			
+			# Reload action map for VR (same code usually used for gesture button press, to avoid needing to do that for this game)
 			xr_config_handler.load_action_map_file(xr_config_handler.game_action_map_cfg_path)
 			if use_arm_swing_jump:
 				xr_physical_movement_controller.detect_game_jump_action_events()
 			if use_jog_movement:
 				xr_physical_movement_controller.detect_game_sprint_events()
+				
+
 			
 # Function to set up VR Controllers to emulate gamepad
 func map_xr_controllers_to_action_map() -> bool:
@@ -1042,9 +1048,9 @@ func reparent_viewport(viewport_node, viewport_location):
 		viewport_node.transform.origin = Vector3(0,0,0)
 		xr_camera_3d.add_child(viewport_node)
 		if viewport_node == xr_main_viewport2d_in_3d:
-			viewport_node.transform.origin = Vector3(0,-0.3,-2.8) * xr_world_scale
+			viewport_node.transform.origin = Vector3(0.3,-0.3,-1.5) * xr_world_scale # Bring closer for this particular game
 		else:
-			viewport_node.transform.origin = Vector3(0,-0.3,-3.2) * xr_world_scale
+			viewport_node.transform.origin = Vector3(0.3,-0.3,-2.0) * xr_world_scale # Bring closer for this particular game
 		
 	elif viewport_location == XR_VIEWPORT_LOCATION.PRIMARY_CONTROLLER:
 		viewport_node.set_screen_size(Vector2(0.5, 0.33) * xr_world_scale)
