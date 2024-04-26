@@ -43,9 +43,6 @@ var dpad_down : InputEventJoypadButton = InputEventJoypadButton.new()
 var dpad_left : InputEventJoypadButton = InputEventJoypadButton.new()
 var dpad_right : InputEventJoypadButton = InputEventJoypadButton.new()
 
-# Internal variables to store state of dpad toggle
-var dpad_toggle_active : bool = false
-
 # Internal variables to store state of start activation
 var start_toggle_active : bool = false
 
@@ -484,13 +481,7 @@ func handle_primary_xr_inputs(button):
 	# Block other inputs if ugvr menu is up to prevent game actions while using ugvr menu
 	if ugvr_menu_showing:
 		return
-	# If user just pressed activation button, activate special combo buttons
-	if button == dpad_activation_button:
-		dpad_toggle_active = true
-		start_toggle_active = true
-		select_toggle_active = true
-		#print("dpad toggle active")
-		
+
 	# Finally pass through remaining gamepad emulation input
 	if primary_action_map.has(button):
 		var event = InputEventJoypadButton.new()
@@ -507,7 +498,6 @@ func handle_primary_xr_release(button):
 	
 	#print("primary button released: ", button)
 	if button == dpad_activation_button:
-		dpad_toggle_active = false
 		start_toggle_active = false
 		select_toggle_active = false
 		#print("dpad toggle off")
@@ -643,45 +633,11 @@ func process_joystick_inputs():
 	primary_x_axis.axis_value = primary_controller.get_vector2("primary").x
 	primary_y_axis.axis_value = -primary_controller.get_vector2("primary").y
 	
-	# If dpad toggle button is active, then send joystick inputs to dpad instead
-	if dpad_toggle_active:
-		if secondary_x_axis.axis_value < -0.5:
-			dpad_left.pressed = true
-			Input.parse_input_event(dpad_left)
-		else:
-			dpad_left.pressed = false
-			Input.parse_input_event(dpad_left)
-			
-			
-		if secondary_x_axis.axis_value >= 0.5:
-			dpad_right.pressed = true
-			Input.parse_input_event(dpad_right)
-		else:
-			dpad_right.pressed = false
-			Input.parse_input_event(dpad_right)
-			
-			
-		if secondary_y_axis.axis_value < -0.5:
-			dpad_up.pressed = true
-			Input.parse_input_event(dpad_up)
-		else:
-			dpad_up.pressed = false
-			Input.parse_input_event(dpad_up)
-			
-		if secondary_y_axis.axis_value >= 0.5:
-			dpad_down.pressed = true
-			Input.parse_input_event(dpad_down)
-		else:
-			dpad_down.pressed = false
-			Input.parse_input_event(dpad_down)
-	
-	# Otherwise process joystick like normal		
-	else:
-		Input.parse_input_event(secondary_x_axis)
-		Input.parse_input_event(secondary_y_axis)
-		if not stick_emulate_mouse_movement:
-			Input.parse_input_event(primary_x_axis)
-			Input.parse_input_event(primary_y_axis)
+	Input.parse_input_event(secondary_x_axis)
+	Input.parse_input_event(secondary_y_axis)
+	if not stick_emulate_mouse_movement:
+		Input.parse_input_event(primary_x_axis)
+		Input.parse_input_event(primary_y_axis)
 
 	# Allow emulation of mouse with primary (default: right) stick
 	if stick_emulate_mouse_movement and (abs(primary_x_axis.axis_value) > emulated_mouse_deadzone or abs(primary_y_axis.axis_value) > emulated_mouse_deadzone):
