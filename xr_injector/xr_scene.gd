@@ -19,7 +19,6 @@ extends Node3D
 @onready var left_gesture_detection_area : Area3D = xr_left_controller.get_node("GestureDetectionArea")
 @onready var right_gesture_detection_area : Area3D = xr_right_controller.get_node("GestureDetectionArea")
 @onready var xr_pointer : Node3D = xr_origin_3d.get_node("XRPointer")
-@onready var welcome_label_3d : Label3D = xr_camera_3d.get_node("WelcomeLabel3D")
 @onready var xr_config_handler : Node = get_node("XRConfigHandler")
 @onready var xr_autosave_timer : Timer = get_node("XRAutoSaveTimer")
 @onready var xr_roomscale_controller : Node = xr_origin_3d.get_node("XRRoomscaleController")
@@ -929,7 +928,6 @@ func _setup_new_xr_origin(new_origin : XROrigin3D):
 	left_gesture_detection_area = xr_left_controller.get_node("GestureDetectionArea")
 	right_gesture_detection_area = xr_right_controller.get_node("GestureDetectionArea")
 	xr_pointer = xr_origin_3d.get_node("XRPointer")
-	welcome_label_3d = xr_camera_3d.get_node("WelcomeLabel3D")
 	xr_roomscale_controller = xr_origin_3d.get_node("XRRoomscaleController")
 	xr_physical_movement_controller = xr_origin_3d.get_node("XRPhysicalMovementController")
 	xr_radial_menu = get_node("XRRadialMenu")
@@ -1281,15 +1279,6 @@ func set_xr_game_options():
 	# Place viewports at proper location based on user config
 	reparent_viewport(xr_main_viewport2d_in_3d, xr_main_viewport_location)
 	reparent_viewport(xr_secondary_viewport2d_in_3d, xr_secondary_viewport_location)
-	
-	# Clear Welcome label (probably someday can make it a config not to show again)
-	if show_welcome_label and not welcome_label_already_shown:
-		welcome_label_3d.show()
-		await get_tree().create_timer(10.0).timeout
-		welcome_label_3d.hide()
-		welcome_label_already_shown = true
-	else:
-		welcome_label_3d.hide()
 
 
 # Function to set proper world scale for various nodes that depend on sizes and distances
@@ -1297,8 +1286,6 @@ func set_worldscale_for_xr_nodes(new_xr_world_scale):
 	gesture_area.transform.origin.y = 0.45 * new_xr_world_scale
 	gesture_area.get_node("GestureAreaShape").shape.radius = 0.3 * new_xr_world_scale
 	gesture_area.get_node("GestureAreaShape").shape.margin = 0.1 * new_xr_world_scale
-	welcome_label_3d.position = Vector3(0, -0.3, -2) * new_xr_world_scale
-	welcome_label_3d.scale = Vector3(1,1,1) * new_xr_world_scale
 	xr_pointer.distance = 10 * new_xr_world_scale
 	left_gesture_detection_area.get_node("ControllerGestureShape").shape.radius = 0.2 * new_xr_world_scale
 	left_gesture_detection_area.get_node("ControllerGestureShape").shape.margin = 0.04 * new_xr_world_scale

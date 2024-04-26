@@ -57,23 +57,6 @@ collision_mask = 32768
 [node name="GestureAreaShape" type="CollisionShape3D" parent="XROrigin3D/XRCamera3D/GestureArea"]
 shape = SubResource("SphereShape3D_10cyd")
 
-[node name="WelcomeLabel3D" type="Label3D" parent="XROrigin3D/XRCamera3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, -2)
-visible = false
-render_priority = 1
-modulate = Color(0.854902, 0.866667, 0.211765, 1)
-text = "Welcome to the earliest alpha of Godot Universal VR Injector! (UGVR)
-
-
-Toggle your menu pointer by raising your right hand over your head and pressing trigger.
-
-Toggle the UGVR menu (WIP), which has more instructions, by raising your left hand over your head and pressing trigger.
-
-Have fun!"
-font_size = 14
-autowrap_mode = 2
-width = 350.0
-
 [node name="BlackOut" parent="XROrigin3D/XRCamera3D" instance=ExtResource("4_ny8kq")]
 
 [node name="XRController3D" type="XRController3D" parent="XROrigin3D"]
