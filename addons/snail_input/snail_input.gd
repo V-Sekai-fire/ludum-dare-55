@@ -453,7 +453,7 @@ var _device_join_input := false
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey or event is InputEventJoypadButton or event is InputEventMouseButton:
 		var device := get_device_for_event(event)
-		if device.active:
+		if device and device.active:
 			if device.player_index >= 0:
 				var slot := get_player_slot(device.player_index)
 				slot.last_device = device
