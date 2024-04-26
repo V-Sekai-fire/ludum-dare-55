@@ -224,17 +224,6 @@ func _ready() -> void:
 	# Set relevant node signals
 	xr_start.connect("xr_started", Callable(self, "_on_xr_started"))
 	xr_autosave_timer.connect("timeout", Callable(self, "_on_xr_autosave_timer_timeout"))
-	#xr_config_handler.connect("xr_game_options_cfg_loaded", Callable(self, "_on_xr_config_handler_xr_game_options_cfg_loaded"))
-	#xr_config_handler.connect("xr_game_control_map_cfg_loaded", Callable(self, "_on_xr_config_handler_xr_game_control_map_cfg_loaded"))
-	#xr_config_handler.connect("xr_game_action_map_cfg_loaded", Callable(self, "_on_xr_config_handler_xr_game_action_map_cfg_loaded"))
-	#xr_config_handler.connect("xr_game_options_cfg_saved", Callable(self, "_on_xr_config_handler_xr_game_options_cfg_saved"))
-	#xr_config_handler.connect("xr_game_control_map_cfg_saved", Callable(self, "_on_xr_config_handler_xr_game_control_map_cfg_saved"))
-	#xr_config_handler.connect("xr_game_action_map_cfg_saved", Callable(self, "_on_xr_config_handler_xr_game_action_map_cfg_saved"))
-	
-	# Set up config handler to use ugvr menu 2d scene, and ugvr menu 2d scene to recognize config handler
-	#xr_config_handler.set_ugvr_gui_menu_2d(ugvr_menu_2d)
-	#xr_config_handler.set_ugvr_menu_viewport(ugvr_menu_viewport)
-	#ugvr_menu_2d.set_config_handler(xr_config_handler) # Not working yet, no script attached to ugvr menu yet
 	
 	# Set up unshaded material for pointers and cursor3D objects
 	unshaded_material.disable_ambient_light = true
@@ -1299,37 +1288,6 @@ func find_and_set_player_characterbody3d_or_null():
 
 # Function to pull current state of config handler game options variables to set same xr scene variables based on user config
 func set_xr_game_options():
-	# Load camera options
-	#xr_world_scale = xr_config_handler.xr_world_scale
-	#camera_offset = xr_config_handler.camera_offset
-	#experimental_passthrough = xr_config_handler.experimental_passthrough
-#
-	## Load viewport options
-	#xr_main_viewport_location = xr_config_handler.xr_main_viewport_location
-	#xr_secondary_viewport_location = xr_config_handler.xr_secondary_viewport_location
-	#primary_viewport_size_multiplier = xr_config_handler.primary_viewport_size_multiplier
-	#secondary_viewport_size_multiplier = xr_config_handler.secondary_viewport_size_multiplier
-	#primary_viewport_offset = xr_config_handler.primary_viewport_offset
-	#secondary_viewport_offset = xr_config_handler.secondary_viewport_offset
-#
-	## Load roomscale options
-	#use_roomscale = xr_config_handler.use_roomscale
-	#roomscale_height_adjustment = xr_config_handler.roomscale_height_adjustment
-	#attempt_to_use_camera_to_set_roomscale_height = xr_config_handler.attempt_to_use_camera_to_set_roomscale_height
-	#reverse_roomscale_direction = xr_config_handler.reverse_roomscale_direction
-	#use_roomscale_3d_cursor = xr_config_handler.use_roomscale_3d_cursor
-	#use_long_range_3d_cursor = xr_config_handler.use_long_range_3d_cursor
-	#roomscale_3d_cursor_distance_from_camera = xr_config_handler.roomscale_3d_cursor_distance_from_camera
-	#roomscale_long_range_3d_cursor_distance_from_camera = xr_config_handler.roomscale_long_range_3d_cursor_distance_from_camera
-	#use_arm_swing_jump = xr_config_handler.use_arm_swing_jump
-	#use_jog_movement = xr_config_handler.use_jog_movement
-	#jog_triggers_sprint = xr_config_handler.jog_triggers_sprint
-	#
-	## Load autosave options
-	#autosave_action_map_duration_in_secs = xr_config_handler.autosave_action_map_duration_in_secs
-	#
-	## Load xr injector GUI options
-	#show_welcome_label = xr_config_handler.show_welcome_label
 	
 	# Set XR worldscale based on config
 	xr_origin_3d.world_scale = xr_world_scale
@@ -1347,17 +1305,7 @@ func set_xr_game_options():
 		welcome_label_already_shown = true
 	else:
 		welcome_label_3d.hide()
-		
-	# Start autosave config timer, at some point only set this in the config file loaded or created signal but just for testing for now
-	# Setting to 0 will disable autosave
-	#if xr_config_handler.autosave_action_map_duration_in_secs != 0:
-		#xr_autosave_timer.wait_time = xr_config_handler.autosave_action_map_duration_in_secs
-		#if xr_autosave_timer.is_paused():
-			#xr_autosave_timer.set_paused(false)
-		#xr_autosave_timer.start()
-	#else:
-		#if not xr_autosave_timer.is_stopped():
-			#xr_autosave_timer.set_paused(true)
+
 
 # Function to set proper world scale for various nodes that depend on sizes and distances
 func set_worldscale_for_xr_nodes(new_xr_world_scale):
@@ -1371,73 +1319,6 @@ func set_worldscale_for_xr_nodes(new_xr_world_scale):
 	left_gesture_detection_area.get_node("ControllerGestureShape").shape.margin = 0.04 * new_xr_world_scale
 	right_gesture_detection_area.get_node("ControllerGestureShape").shape.radius = 0.2 * new_xr_world_scale
 	right_gesture_detection_area.get_node("ControllerGestureShape").shape.margin = 0.04 * new_xr_world_scale
-	
-# Function to pull current state of config handler control options variables to set same xr scene variables based on user config	
-#func set_xr_control_options():
-	## Load base control maps
-	#primary_action_map = xr_config_handler.primary_action_map
-	#secondary_action_map = xr_config_handler.secondary_action_map
-	#
-	## Load mouse emulation options
-	#stick_emulate_mouse_movement = xr_config_handler.stick_emulate_mouse_movement
-	#head_emulate_mouse_movement = xr_config_handler.head_emulate_mouse_movement
-	#primary_controller_emulate_mouse_movement = xr_config_handler.primary_controller_emulate_mouse_movement
-	#secondary_controller_emulate_mouse_movement = xr_config_handler.secondary_controller_emulate_mouse_movement
-	#emulated_mouse_sensitivity_multiplier = xr_config_handler.emulated_mouse_sensitivity_multiplier
-	#emulated_mouse_deadzone = xr_config_handler.emulated_mouse_deadzone
-	#
-	## Load other control options
-	#turning_type = xr_config_handler.turning_type
-	#turning_speed = xr_config_handler.turning_speed
-	#turning_degrees = xr_config_handler.turning_degrees
-	#stick_turn_controller = xr_config_handler.stick_turn_controller
-	#grip_deadzone = xr_config_handler.grip_deadzone
-	#primary_controller_selection = xr_config_handler.primary_controller_selection
-	#ugvr_menu_toggle_combo = xr_config_handler.ugvr_menu_toggle_combo
-	#pointer_gesture_toggle_button = xr_config_handler.pointer_gesture_toggle_button
-	#gesture_load_action_map_button = xr_config_handler.gesture_load_action_map_button
-	#gesture_set_user_height_button = xr_config_handler.gesture_set_user_height_button
-	#dpad_activation_button = xr_config_handler.dpad_activation_button
-	#start_button = xr_config_handler.start_button
-	#select_button = xr_config_handler.select_button
-	#use_physical_gamepad_only = xr_config_handler.use_physical_gamepad_only
-	#
-	## Set up xr controllers to emulate gamepad
-	#var finished = map_xr_controllers_to_action_map()
-
-# Function to pull current state of config handler action map variables to set same xr scene variables based on user config	
-#func set_xr_action_map_options():
-	#use_xr_radial_menu = xr_config_handler.use_xr_radial_menu
-	#xr_radial_menu_mode = xr_config_handler.xr_radial_menu_mode
-	#xr_radial_menu_entries = xr_config_handler.xr_radial_menu_entries
-	#open_radial_menu_button = xr_config_handler.open_radial_menu_button
-	#setup_radial_menu()
-	#ugvr_menu_2d.connect_option_button_chidren_signals()
-	
-# Receiver function for config file signal that game options have been loaded
-#func _on_xr_config_handler_xr_game_options_cfg_loaded(_path_to_file : String):
-	#set_xr_game_options()
-	#
-## Reciever function for config file signal that control options have been loaded
-#func _on_xr_config_handler_xr_game_control_map_cfg_loaded(_path_to_file : String):
-	#set_xr_control_options()
-#
-## Reciever function for config file signal that action map options have been loaded	
-#func _on_xr_config_handler_xr_game_action_map_cfg_loaded(_path_to_file : String):
-	#set_xr_action_map_options()
-	#
-## Receiver function for config file signal that game options have been saved
-#func _on_xr_config_handler_xr_game_options_cfg_saved(_path_to_file : String):
-	#set_xr_game_options()
-	#
-## Reciever function for config file signal that control options have been saved
-#func _on_xr_config_handler_xr_game_control_map_cfg_saved(_path_to_file : String):
-	#set_xr_control_options()
-#
-## Reciever function for config file signal that action map options have been saved	
-#func _on_xr_config_handler_xr_game_action_map_cfg_saved(_path_to_file : String):
-	#set_xr_action_map_options()
-
 
 
 # -----------------------------------------------------
