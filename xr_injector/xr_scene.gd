@@ -328,7 +328,10 @@ func _eval_tree() -> void:
 	
 	# If using roomscale, find current characterbody parent of camera, if any, then send to roomscale controller and enable it
 	if !is_instance_valid(current_roomscale_character_body) and use_roomscale == true:
-		current_roomscale_character_body = find_and_set_player_characterbody3d_or_null()
+		if find_crappy_contraptions_player_body:
+			current_roomscale_character_body = _get_crappy_contraptions_player_body_or_null()
+		else:
+			current_roomscale_character_body = find_and_set_player_characterbody3d_or_null()
 		
 		# If we now found a roomscale body, reparent xr origin 3D to character body
 		if is_instance_valid(current_roomscale_character_body) and xr_origin_reparented == false:
@@ -1208,3 +1211,13 @@ func set_worldscale_for_xr_nodes(new_xr_world_scale):
 	left_gesture_detection_area.get_node("ControllerGestureShape").shape.margin = 0.04 * new_xr_world_scale
 	right_gesture_detection_area.get_node("ControllerGestureShape").shape.radius = 0.2 * new_xr_world_scale
 	right_gesture_detection_area.get_node("ControllerGestureShape").shape.margin = 0.04 * new_xr_world_scale
+
+
+# Specific to crappy contraptions
+func _get_crappy_contraptions_player_body_or_null():
+	var potential_character_bodies : Array = get_node("/root").find_children("*", "CharacterBody3D", true, false)
+	for body in potential_character_bodies:
+		if body.name.to_lower().contains("player"):
+			print("Winning characterbody from _get_crappy_contraptions_player_body_or_null: ", body)
+			return body
+	return null
