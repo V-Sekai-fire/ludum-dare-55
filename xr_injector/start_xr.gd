@@ -3,7 +3,7 @@ extends Node
 
 ## XRTools Start XR Class
 ##
-## This class supports both the OpenXR and WebXR interfaces, and handles
+## This class supports both the OpenXR interfaces, and handles
 ## the initialization of the interface as well as reporting when the user
 ## starts and ends the VR session.
 ##
@@ -13,14 +13,12 @@ extends Node
 
 ## This signal is emitted when XR becomes active. For OpenXR this corresponds
 ## with the 'openxr_focused_state' signal which occurs when the application
-## starts receiving XR input, and for WebXR this corresponds with the
-## 'session_started' signal.
+## starts receiving XR input.
 signal xr_started
 
 ## This signal is emitted when XR ends. For OpenXR this corresponds with the
 ## 'openxr_visible_state' state which occurs when the application has lost
-## XR input focus, and for WebXR this corresponds with the 'session_ended'
-## signal.
+## XR input focus.
 signal xr_ended
 
 
@@ -62,11 +60,6 @@ func initialize() -> bool:
 	xr_interface = XRServer.find_interface('OpenXR')
 	if xr_interface:
 		return _setup_for_openxr()
-
-	# Check for WebXR interface
-	xr_interface = XRServer.find_interface('WebXR')
-	if xr_interface:
-		return _setup_for_webxr()
 
 	# No XR interface
 	xr_interface = null
@@ -183,89 +176,6 @@ func _set_enable_passthrough(p_new_value : bool) -> void:
 			enable_passthrough = xr_interface.start_passthrough()
 		else:
 			xr_interface.stop_passthrough()
-
-
-# Perform WebXR setup
-func _setup_for_webxr() -> bool:
-	print("WebXR: Configuring interface")
-
-	# Connect the WebXR events
-	xr_interface.connect("session_supported", _on_webxr_session_supported)
-	xr_interface.connect("session_started", _on_webxr_session_started)
-	xr_interface.connect("session_ended", _on_webxr_session_ended)
-	xr_interface.connect("session_failed", _on_webxr_session_failed)
-
-	# WebXR currently has no means of querying the refresh rate, so use
-	# something sufficiently high
-	Engine.physics_ticks_per_second = 144
-
-	# If the viewport is already in XR mode then we are done.
-	if get_viewport().use_xr:
-		return true
-
-	# This returns immediately - our _webxr_session_supported() method
-	# (which we connected to the "session_supported" signal above) will
-	# be called sometime later to let us know if it's supported or not.
-	xr_interface.is_session_supported("immersive-vr")
-
-	# Report success
-	return true
-
-
-# Handle WebXR session supported check
-func _on_webxr_session_supported(session_mode: String, supported: bool) -> void:
-	if session_mode == "immersive-vr":
-		if supported:
-			# WebXR supported - show canvas on web browser to enter WebVR
-			$EnterWebXR.visible = true
-		else:
-			OS.alert("Your web browser doesn't support VR. Sorry!")
-
-
-# Called when the WebXR session has started successfully
-func _on_webxr_session_started() -> void:
-	print("WebXR: Session started")
-
-	# Hide the canvas and switch the viewport to XR
-	$EnterWebXR.visible = false
-	get_viewport().use_xr = true
-
-	# Report the XR starting
-	xr_active = true
-	emit_signal("xr_started")
-
-
-# Called when the user ends the immersive VR session
-func _on_webxr_session_ended() -> void:
-	print("WebXR: Session ended")
-
-	# Show the canvas and switch the viewport to non-XR
-	$EnterWebXR.visible = true
-	get_viewport().use_xr = false
-
-	# Report the XR ending
-	xr_active = false
-	emit_signal("xr_ended")
-
-
-# Called when the immersive VR session fails to start
-func _on_webxr_session_failed(message: String) -> void:
-	OS.alert("Unable to enter VR: " + message)
-	$EnterWebXR.visible = true
-
-
-# Handle the Enter VR button on the WebXR browser
-func _on_enter_webxr_button_pressed() -> void:
-	# Configure the WebXR interface
-	xr_interface.session_mode = 'immersive-vr'
-	xr_interface.requested_reference_space_types = 'bounded-floor, local-floor, local'
-	xr_interface.required_features = 'local-floor'
-	xr_interface.optional_features = 'bounded-floor'
-
-	# Initialize the interface. This should trigger either _on_webxr_session_started
-	# or _on_webxr_session_failed
-	if not xr_interface.initialize():
-		OS.alert("Failed to initialize WebXR")
 
 
 # Find the closest value in the array to the target
