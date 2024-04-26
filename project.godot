@@ -34,14 +34,45 @@ window/size/viewport_width=1280
 window/size/viewport_height=800
 window/size/extend_to_title=true
 window/energy_saving/keep_screen_on=false
+window/stretch/mode="canvas_items"
+window/stretch/aspect="keep_width"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/smoothing/plugin.cfg", "res://addons/snail_input/plugin.cfg", "res://addons/snail_transition/plugin.cfg")
+enabled=PackedStringArray("res://addons/object_inspector/plugin.cfg", "res://addons/smoothing/plugin.cfg", "res://addons/snail_input/plugin.cfg", "res://addons/snail_transition/plugin.cfg")
 
 [filesystem]
 
 import/blender/enabled=false
+
+[importer_defaults]
+
+scene={
+"_subresources": {},
+"animation/fps": 30,
+"animation/import": true,
+"animation/import_rest_as_RESET": false,
+"animation/remove_immutable_tracks": true,
+"animation/trimming": false,
+"fbx/allow_geometry_helper_nodes": false,
+"fbx/embedded_image_handling": 1,
+"fbx/importer": 0,
+"gltf/embedded_image_handling": 2,
+"gltf/naming_version": 1,
+"import_script/path": "",
+"meshes/create_shadow_meshes": true,
+"meshes/ensure_tangents": true,
+"meshes/force_disable_compression": false,
+"meshes/generate_lods": true,
+"meshes/light_baking": 1,
+"meshes/lightmap_texel_size": 0.2,
+"nodes/apply_root_scale": true,
+"nodes/import_as_skeleton_bones": false,
+"nodes/root_name": "",
+"nodes/root_scale": 1.0,
+"nodes/root_type": "",
+"skins/use_named_skins": true
+}
 
 [input]
 
@@ -239,6 +270,7 @@ thrust_down={
 
 [rendering]
 
+textures/vram_compression/import_s3tc_bptc=true
 textures/vram_compression/import_etc2_astc=true
 reflections/sky_reflections/roughness_layers=6
 reflections/sky_reflections/ggx_samples=16
@@ -248,5 +280,4 @@ textures/default_filters/anisotropic_filtering_level=3
 [xr]
 
 openxr/enabled=true
-openxr/startup_alert=false
 shaders/enabled=true
