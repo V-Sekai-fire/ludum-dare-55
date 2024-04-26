@@ -224,7 +224,6 @@ func _ready() -> void:
 	# Set relevant node signals
 	xr_start.connect("xr_started", Callable(self, "_on_xr_started"))
 	xr_autosave_timer.connect("timeout", Callable(self, "_on_xr_autosave_timer_timeout"))
-	xr_physical_movement_controller.connect("tree_exiting", Callable(self, "_on_xr_origin_exiting_tree"))
 	xr_radial_menu.connect("entry_selected", Callable(self, "_on_xr_radial_menu_entry_selected"))
 	#xr_config_handler.connect("xr_game_options_cfg_loaded", Callable(self, "_on_xr_config_handler_xr_game_options_cfg_loaded"))
 	#xr_config_handler.connect("xr_game_control_map_cfg_loaded", Callable(self, "_on_xr_config_handler_xr_game_control_map_cfg_loaded"))
@@ -1341,9 +1340,6 @@ func set_xr_game_options():
 	reparent_viewport(xr_main_viewport2d_in_3d, xr_main_viewport_location)
 	reparent_viewport(xr_secondary_viewport2d_in_3d, xr_secondary_viewport_location)
 	
-	# Enable arm swing jog or jump movement if enabled by the user
-	xr_physical_movement_controller.set_enabled(use_jog_movement, use_arm_swing_jump, primary_controller, secondary_controller, jog_triggers_sprint)
-
 	# Clear Welcome label (probably someday can make it a config not to show again)
 	if show_welcome_label and not welcome_label_already_shown:
 		welcome_label_3d.show()

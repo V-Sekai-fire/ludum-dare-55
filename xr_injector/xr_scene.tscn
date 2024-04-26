@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://e4ctdupwya3a"]
+[gd_scene load_steps=13 format=3 uid="uid://e4ctdupwya3a"]
 
 [ext_resource type="Script" path="res://xr_injector/xr_scene.gd" id="1_fmh2y"]
 [ext_resource type="PackedScene" uid="uid://i1hto5hirreh" path="res://xr_injector/xr_pointer.tscn" id="2_l282w"]
@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://clujaf3u776a3" path="res://xr_injector/xr_viewport_2d_in_3d.tscn" id="3_f316b"]
 [ext_resource type="PackedScene" uid="uid://bbvciliw3xnf6" path="res://xr_injector/xr_black_out.tscn" id="4_ny8kq"]
 [ext_resource type="Script" path="res://xr_injector/xr_roomscale_controller.gd" id="5_1018u"]
-[ext_resource type="Script" path="res://xr_injector/xr_physical_movement_controller.gd" id="6_1wyxn"]
 [ext_resource type="Script" path="res://xr_injector/xr_radial_menu.gd" id="7_hw5k1"]
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_pnlj8"]
@@ -897,9 +896,6 @@ target_radius = 0.01
 
 [node name="XRRoomscaleController" type="Node" parent="XROrigin3D"]
 script = ExtResource("5_1018u")
-
-[node name="XRPhysicalMovementController" type="Node" parent="XROrigin3D"]
-script = ExtResource("6_1wyxn")
 
 [node name="XRConfigHandler" type="Node" parent="."]
 script = SubResource("GDScript_x27ew")

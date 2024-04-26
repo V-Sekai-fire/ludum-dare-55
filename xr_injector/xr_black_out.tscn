@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=4 uid="uid://bbvciliw3xnf6"]
+[gd_scene load_steps=5 format=3 uid="uid://bbvciliw3xnf6"]
 
 [ext_resource type="Script" path="res://xr_injector/xr_black_out.gd" id="1_1r6dl"]
 [ext_resource type="Shader" path="res://xr_injector/xr_black_out.gdshader" id="2_xc5vy"]
