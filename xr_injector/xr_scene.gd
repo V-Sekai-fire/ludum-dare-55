@@ -385,8 +385,6 @@ func _eval_tree() -> void:
 			target_xr_viewport.use_xr = false
 			target_xr_viewport = xr_origin_3d.get_viewport()
 			
-			# Reload action map for VR (same code usually used for gesture button press, to avoid needing to do that for this game)
-			xr_config_handler.load_action_map_file(xr_config_handler.game_action_map_cfg_path)
 			if use_arm_swing_jump:
 				xr_physical_movement_controller.detect_game_jump_action_events()
 			if use_jog_movement:
@@ -888,7 +886,6 @@ func _on_xr_started():
 	var loaded : bool = false
 	loaded = xr_config_handler.load_game_control_map_cfg_file(xr_config_handler.game_control_map_cfg_path)
 	loaded = xr_config_handler.load_game_options_cfg_file(xr_config_handler.game_options_cfg_path)
-	loaded = xr_config_handler.load_action_map_file(xr_config_handler.game_action_map_cfg_path)
 	
 	# Set Viewport sizes and locations for GUI
 	setup_viewports()
