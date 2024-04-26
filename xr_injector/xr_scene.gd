@@ -1154,74 +1154,38 @@ func find_active_world_environment_or_null():
 
 # Attempts to find the characterbody3d used in the flatscreen game by various methods and return it, or null if none is found
 func find_and_set_player_characterbody3d_or_null():
-	var potential_character_body_node = null
 	# Only search for characterbody once we have a present camera in the scene driving the xr origin
-	if is_instance_valid(current_camera):
-		# First try non-recursive search for "typical" FPS setups
-		print("Trying to find characterbody 3D for roomscale....")
-		potential_character_body_node = current_camera.get_parent_node_3d()
-		# if parent of active camera not a Characterbody3D continue search
-		if is_instance_valid(potential_character_body_node):
-			if !potential_character_body_node.is_class("CharacterBody3D"):
-				print("parent of current camera is not CharacterBody3D, trying again")
-				potential_character_body_node = potential_character_body_node.get_parent_node_3d()
-				if is_instance_valid(potential_character_body_node) and !potential_character_body_node.is_class("CharacterBody3D"):
-					print("parent of parent of current camera is not CharacterBody3D, ending simple search.")
-					potential_character_body_node = null
-					var potential_character_bodies : Array = get_node("/root").find_children("*", "CharacterBody3D", true, false)
-					print("now checking all other character bodies")
-					print(potential_character_bodies)
-					if potential_character_bodies.size() == 1:
-						print("Only one characterbody3d found, assuming it's our player.")
-						return potential_character_bodies[0]
-					elif potential_character_bodies.size() > 1:
-						for body in potential_character_bodies:
-							if body.is_ancestor_of(current_camera):
-								print("Winning characterbody from recursive search found: ", body)
-								return body
-							elif body.name.to_lower().contains("player") or body.name.to_lower().contains("controller"):
-								print("Winning characterbody from recursive search with name search found: ", body)
-								return body
-				# If we have a valid node, and it was a class character body, we have our characterbody3D
-				elif is_instance_valid(potential_character_body_node):
-					print("Character body found as parent of parent of current camera, sending to roomscale node: ", potential_character_body_node)
-					return potential_character_body_node
-				# If we don't have a valid node, then try recursive search
-				else:
-					var potential_character_bodies : Array = get_node("/root").find_children("*", "CharacterBody3D", true, false)
-					print("now checking all other character bodies")
-					print(potential_character_bodies)
-					if potential_character_bodies.size() == 1:
-						print("Only one characterbody3d found, assuming it's our player.")
-						return potential_character_bodies[0]
-					elif potential_character_bodies.size() > 1:
-						for body in potential_character_bodies:
-							if body.is_ancestor_of(current_camera):
-								print("Winning characterbody from recursive search found: ", body)
-								return body
-							elif body.name.to_lower().contains("player") or body.name.to_lower().contains("controller"):
-								print("Winning characterbody from recursive search with name search found: ", body)
-								return body
-			# If we have a valid node and it's a character body, we found our characterbody as a parent of the camera
-			else:
-				print("Character body found as parent to current camera, sending to roomscale node: ", potential_character_body_node)
-				return potential_character_body_node
-		# If camera does not have any parent node3d, just do recursive search
-		else:
-			var potential_character_bodies : Array = get_node("/root").find_children("*", "CharacterBody3D", true, false)
-			print("now checking all other character bodies")
-			print(potential_character_bodies)
-			if potential_character_bodies.size() == 1:
-				print("Only one characterbody3d found, assuming it's our player.")
-				return potential_character_bodies[0]
-			elif potential_character_bodies.size() > 1:
-				for body in potential_character_bodies:
-					if body.is_ancestor_of(current_camera):
-						print("Winning characterbody from recursive search found: ", body)
-						return body
-					elif body.name.to_lower().contains("player") or body.name.to_lower().contains("controller"):
-						print("Winning characterbody from recursive search with name search found: ", body)
-						return body
+	if not is_instance_valid(current_camera):
+		return null
+
+	print("Trying to find characterbody 3D for roomscale....")
+	var potential_character_body_node = current_camera.get_parent_node_3d()
+
+	# If parent of active camera is a CharacterBody3D, return it
+	if is_instance_valid(potential_character_body_node) and potential_character_body_node.is_class("CharacterBody3D"):
+		print("Character body found as parent to current camera, sending to roomscale node: ", potential_character_body_node)
+		return potential_character_body_node
+
+	# If parent of active camera is not a CharacterBody3D, try its parent
+	potential_character_body_node = potential_character_body_node.get_parent_node_3d()
+	if is_instance_valid(potential_character_body_node) and potential_character_body_node.is_class("CharacterBody3D"):
+		print("Character body found as parent of parent of current camera, sending to roomscale node: ", potential_character_body_node)
+		return potential_character_body_node
+
+	# If no CharacterBody3D found yet, do a recursive search
+	var potential_character_bodies: Array = get_node("/root").find_children("*", "CharacterBody3D", true, false)
+	print("now checking all other character bodies")
+	print(potential_character_bodies)
+
+	if potential_character_bodies.size() == 1:
+		print("Only one characterbody3d found, assuming it's our player.")
+		return potential_character_bodies[0]
+
+	for body in potential_character_bodies:
+		if body.is_ancestor_of(current_camera) or body.name.to_lower().contains("player") or body.name.to_lower().contains("controller"):
+			print("Winning characterbody from recursive search found: ", body)
+			return body
+
 	# If no body has been returned at the end of everything, return null instead
 	return null
 
