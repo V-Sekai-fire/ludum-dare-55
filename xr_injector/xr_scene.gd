@@ -859,11 +859,6 @@ func _on_xr_started():
 	print("XR Camera's viewport is: ", xr_camera_3d.get_viewport())
 	print("XR Camera's window is: ", xr_camera_3d.get_window()) 
 	
-	# Load config files; if not using XR then do not use XR config files
-	var loaded : bool = false
-	loaded = xr_config_handler.load_game_control_map_cfg_file(xr_config_handler.game_control_map_cfg_path)
-	loaded = xr_config_handler.load_game_options_cfg_file(xr_config_handler.game_options_cfg_path)
-	
 	# Set Viewport sizes and locations for GUI
 	setup_viewports()
 	
