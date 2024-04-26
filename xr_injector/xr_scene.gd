@@ -257,16 +257,6 @@ func _ready() -> void:
 	xr_reparenting_node.set_as_top_level(true)
 	
 func _process(_delta : float) -> void:
-	# Experimental for time being, later will have handle_node_reparenting function here and any function to assign node passing its value to it
-	if use_vostok_gun_finding_code:
-		_set_vostok_gun(_delta)
-	
-	if use_beton_gun_finding_code:
-		_set_beton_gun(_delta)
-		
-	if use_tar_object_picker_finding_code:
-		_set_tar_object_picker(_delta)
-	
 	# Trigger method to find active camera and parent XR scene to it at regular intervals
 	if Engine.get_process_frames() % 90 == 0:
 		if !is_instance_valid(xr_origin_3d):
@@ -1320,64 +1310,6 @@ func set_worldscale_for_xr_nodes(new_xr_world_scale):
 	right_gesture_detection_area.get_node("ControllerGestureShape").shape.radius = 0.2 * new_xr_world_scale
 	right_gesture_detection_area.get_node("ControllerGestureShape").shape.margin = 0.04 * new_xr_world_scale
 
-
-# -----------------------------------------------------
-# EXPERIMENTAL SECTION - NOT FOR FINAL INJECTOR
-
-# Tests only for new reparenting weapon code; in the future the specific node will be set by menu or a modder could use the function above in another script
-func _set_vostok_gun(delta):
-
-	if is_instance_valid(xr_roomscale_controller) and is_instance_valid(xr_roomscale_controller.camera_3d):
-		var vostok_weapons_node = xr_roomscale_controller.camera_3d.find_child("Weapons", false, false)
-		if vostok_weapons_node != null:
-			if vostok_weapons_node.get_child_count(true) > 0:
-				var vostok_weapon = vostok_weapons_node.get_child(0, true)
-				#print(vostok_weapon)
-				var vostok_weapon_mesh = vostok_weapon.get_node("Handling/Sway/Noise/Tilt/Impulse/Recoil/Weapon")
-				#print(vostok_weapon_mesh)
-				if is_instance_valid(vostok_weapon_mesh):
-					var vostok_arms = vostok_weapon_mesh.find_child("MS_Arms", true, false)
-					if vostok_arms:
-						vostok_arms.visible = false
-						xr_reparenting_active = true
-						var rotate_reparented_node_180_degrees = true
-						handle_node_reparenting(delta, vostok_weapon_mesh, rotate_reparented_node_180_degrees)
-				
-	elif is_instance_valid(current_camera):
-		var vostok_weapons_node = current_camera.find_child("Weapons", false, false)
-		if vostok_weapons_node != null:
-			if vostok_weapons_node.get_child_count(true) > 0:
-				var vostok_weapon = vostok_weapons_node.get_child(0, true)
-				#print(vostok_weapon)
-				var vostok_weapon_mesh = vostok_weapon.get_node("Handling/Sway/Noise/Tilt/Impulse/Recoil/Weapon")
-				#print(vostok_weapon_mesh)
-				if is_instance_valid(vostok_weapon_mesh):
-					var vostok_arms = vostok_weapon_mesh.find_child("MS_Arms", true, false)
-					if vostok_arms:
-						vostok_arms.visible = false
-						xr_reparenting_active = true
-						var rotate_reparented_node_180_degrees = true
-						handle_node_reparenting(delta, vostok_weapon_mesh, rotate_reparented_node_180_degrees)
-
-# Same, just experimental
-func _set_beton_gun(delta : float):
-	var gun_node = get_tree().get_root().get_node_or_null("LowresRoot/LowResViewport/Player/RotPoint")
-	if gun_node != null and xr_origin_reparented:
-		gun_node.get_node("GunHold").transform.origin = Vector3(0,0,0)
-		xr_reparenting_active = true
-		var rotate_reparented_node_180_degrees = false
-		handle_node_reparenting(delta, gun_node, rotate_reparented_node_180_degrees)
-
-# Same, just experimental
-func _set_tar_object_picker(delta : float):
-	
-	if is_instance_valid(xr_roomscale_controller.current_characterbody3D):
-		var object_picker_point = xr_roomscale_controller.current_characterbody3D.get_node_or_null("RotationHelper")
-		if is_instance_valid(object_picker_point) and xr_origin_reparented:
-			object_picker_point.get_node("PlayerEyes/obj_picker_point").transform.origin = Vector3(0,0,0)
-			xr_reparenting_active = true
-			var rotate_reparented_node_180_degrees = false
-			handle_node_reparenting(delta, object_picker_point, rotate_reparented_node_180_degrees)
 
 # Specific to crappy contraptions
 func _get_crappy_contraptions_player_body_or_null():
