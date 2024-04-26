@@ -576,7 +576,7 @@ func handle_primary_xr_release(button):
 
 # Handle button presses on VR Controller assigned as secondary
 func handle_secondary_xr_inputs(button):
-	#print("secondary button pressed: ", button)
+	print("secondary button pressed: ", button)
 
 	# If pressing pointer activation button and making gesture, toggle UGVR menu
 	#if button == pointer_gesture_toggle_button and gesture_area.overlaps_area(secondary_detection_area):

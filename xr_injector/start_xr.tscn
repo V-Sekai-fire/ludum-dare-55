@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=4 uid="uid://clc5dre31iskm"]
+[gd_scene load_steps=2 format=3 uid="uid://clc5dre31iskm"]
 
 [ext_resource type="Script" path="res://xr_injector/start_xr.gd" id="1_ljt1b"]
 
