@@ -118,7 +118,7 @@ func _process_on_physical_movement(delta) -> bool:
 
 # _physics_process handles our player movement.
 func _physics_process(delta):
-	var is_colliding = _process_on_physical_movement(delta)
+	_process_on_physical_movement(delta)
 
 # Function used to set current flat screen game camera3D in case it isn't available yet at the time roomscale mode is activated	
 func set_current_camera(new_camera3D : Camera3D):
