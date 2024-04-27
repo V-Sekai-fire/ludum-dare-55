@@ -22,7 +22,7 @@ extends Node3D
 @onready var xr_config_handler : Node = get_node("XRConfigHandler")
 @onready var xr_autosave_timer : Timer = get_node("XRAutoSaveTimer")
 @onready var xr_roomscale_controller : Node = xr_origin_3d.get_node("XRRoomscaleController")
-@onready var xr_physical_movement_controller : Node = xr_origin_3d.get_node("XRPhysicalMovementController")
+
 @onready var xr_radial_menu : Node3D =  get_node("XRRadialMenu")
 @onready var xr_black_out : Node3D = xr_camera_3d.get_node("BlackOut")
 @onready var ugvr_menu_viewport : Node3D = get_node("XRMenuViewport2Din3D")
@@ -357,12 +357,6 @@ func _eval_tree() -> void:
 			xr_origin_reparented = true
 			target_xr_viewport.use_xr = false
 			target_xr_viewport = xr_origin_3d.get_viewport()
-			
-			if use_arm_swing_jump:
-				xr_physical_movement_controller.detect_game_jump_action_events()
-			if use_jog_movement:
-				xr_physical_movement_controller.detect_game_sprint_events()
-				
 
 			
 # Function to set up VR Controllers to emulate gamepad
@@ -524,14 +518,6 @@ func handle_secondary_xr_inputs(button):
 		#else:
 			#xr_pointer.collision_mask = 1048576 #  layer 21 - layer the other two viewports are now on
 
-	# If button is assigned to load action map (temporary,this should be a GUI option) and making gesture, load action map
-	if button == gesture_load_action_map_button and gesture_area.overlaps_area(secondary_detection_area):
-		xr_config_handler.load_action_map_file(xr_config_handler.game_action_map_cfg_path)
-		if use_arm_swing_jump:
-			xr_physical_movement_controller.detect_game_jump_action_events()
-		if use_jog_movement:
-			xr_physical_movement_controller.detect_game_sprint_events()
-	
 	# Block other inputs if ugvr menu is up to prevent game actions while using ugvr menu
 	if ugvr_menu_showing:
 		return
@@ -885,8 +871,6 @@ func _setup_new_xr_origin(new_origin : XROrigin3D):
 	right_gesture_detection_area = xr_right_controller.get_node("GestureDetectionArea")
 	xr_pointer = xr_origin_3d.get_node("XRPointer")
 	xr_roomscale_controller = xr_origin_3d.get_node("XRRoomscaleController")
-	xr_physical_movement_controller = xr_origin_3d.get_node("XRPhysicalMovementController")
-	xr_radial_menu = get_node("XRRadialMenu")
 	xr_black_out = xr_camera_3d.get_node("BlackOut")
 	ugvr_menu_holder = xr_camera_3d.get_node("UGVRMenuHolder")
 	
@@ -916,10 +900,6 @@ func _setup_new_xr_origin(new_origin : XROrigin3D):
 	# Set up the rest of viewports
 	setup_viewports()
 	set_worldscale_for_xr_nodes(xr_world_scale)
-	# Reset other nodes
-	xr_physical_movement_controller.set_enabled(use_jog_movement, use_arm_swing_jump, primary_controller, secondary_controller, jog_triggers_sprint)
-	xr_physical_movement_controller.connect("tree_exiting", Callable(self, "_on_xr_origin_exiting_tree"))
-	xr_radial_menu.set_controller(primary_controller)
 	
 	xr_origin_reparented = false
 	current_roomscale_character_body = null
