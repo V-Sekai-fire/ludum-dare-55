@@ -96,7 +96,7 @@ class InputDevice:
 			"Sony DualSense", "PS5 Controller", "PS4 Controller":
 				return InputDeviceType.Gamepad_Playstation
 			"Keyboard":
-				return InputDeviceType.Gamepad_Generic
+				return InputDeviceType.Keyboard
 			_:
 				return InputDeviceType.Gamepad_Generic
 
