@@ -280,8 +280,7 @@ func _rescan_devices():
 			)
 			continue
 
-		if Input.is_joy_known(i):
-			_input_devices.append(InputDevice.new(i))
+		_input_devices.append(InputDevice.new(i))
 
 
 func _ready() -> void:
