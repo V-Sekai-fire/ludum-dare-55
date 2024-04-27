@@ -213,8 +213,6 @@ var find_crappy_contraptions_player_body : bool = true
 
 func _ready() -> void:
 	set_process(false)
-	# Turn off FSR
-	get_tree().root.scaling_3d_mode = Viewport.SCALING_3D_MODE_BILINEAR
 	get_tree().root.scaling_3d_scale = 1.0
 	
 	# Set relevant node signals
