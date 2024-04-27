@@ -484,8 +484,6 @@ func _input(event: InputEvent) -> void:
 
 	if event is InputEventMouseMotion and Input.mouse_mode != Input.MOUSE_MODE_VISIBLE:
 		_try_auto_join(event)
-	elif event is InputEventJoypadMotion or event is InputEventMouseMotion:
-		return  # only care about button events after here
 	elif Input.is_anything_pressed():
 		_try_auto_join(event)
 
